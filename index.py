@@ -9,6 +9,7 @@ pages = {
         # st.Page("pages/home.py", title="Home"),
         st.Page("pages/Sacarias.py", title="Sacaria"),
         st.Page("pages/testes.py", title="Testes"),
+        st.Page("pages/camera.py", title="Camera"),
     ]
 }
 
