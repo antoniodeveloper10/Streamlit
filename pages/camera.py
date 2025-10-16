@@ -1,22 +1,21 @@
 import streamlit as st
-from PIL import Image
-from pyzbar.pyzbar import decode
+from streamlit_webrtc import webrtc_streamer, VideoProcessorBase
+import av
+import cv2
+import numpy as np
 
-st.title("Leitor de QR Code para celular / Streamlit Cloud")
+st.title("Leitor de QR Code em tempo real - Streamlit Cloud / Celular")
 
-# Botão para abrir a câmera
-if st.button("Abrir câmera"):
-    img_file = st.camera_input("Aponte a câmera para o QR Code")
+class QRCodeProcessor(VideoProcessorBase):
+    def recv(self, frame: av.VideoFrame):
+        img = frame.to_ndarray(format="bgr24")
+        detector = cv2.QRCodeDetector()
+        data, bbox, _ = detector.detectAndDecode(img)
+        if data:
+            st.session_state['qr_data'] = data
+        return av.VideoFrame.from_ndarray(img, format="bgr24")
 
-    if img_file:
-        # Converte para imagem PIL
-        img = Image.open(img_file)
-        st.image(img, caption="Imagem capturada", use_column_width=True)
+webrtc_streamer(key="qr-code", video_processor_factory=QRCodeProcessor)
 
-        # Decodifica o QR code
-        decoded_objects = decode(img)
-        if decoded_objects:
-            for obj in decoded_objects:
-                st.success(f"QR Code detectado: {obj.data.decode('utf-8')}")
-        else:
-            st.warning("Nenhum QR Code detectado.")
+if 'qr_data' in st.session_state:
+    st.success(f"QR Code detectado: {st.session_state['qr_data']}")
