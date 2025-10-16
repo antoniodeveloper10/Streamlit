@@ -2,16 +2,15 @@ import streamlit as st
 from PIL import Image
 from pyzbar.pyzbar import decode
 
-st.title("Leitor de Código de Barras")
+st.title("Leitor de Código de Barras no Celular")
 
-# Captura a foto usando a câmera
-foto = st.camera_input("Aponte a câmera para o código de barras")
+# Abre a câmera do celular
+foto = st.camera_input("Aponte a câmera para o código de barras ou QR code")
 
 if foto:
-    # Mostra a imagem capturada
-    st.image(foto)
+    st.image(foto)  # mostra a foto na tela
 
-    # Converte a imagem para PIL
+    # Converte para PIL
     imagem = Image.open(foto)
 
     # Decodifica códigos de barra
@@ -22,3 +21,5 @@ if foto:
             st.success(f"Código lido: {codigo.data.decode('utf-8')}")
     else:
         st.warning("Nenhum código de barras detectado.")
+
+
