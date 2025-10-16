@@ -1,9 +1,8 @@
 import streamlit as st
-import cv2
-import numpy as np
 from PIL import Image
+from pyzbar.pyzbar import decode
 
-st.title("Leitor de QR Code pelo celular")
+st.title("Leitor de QR Code para celular / Streamlit Cloud")
 
 # Botão para abrir a câmera
 if st.button("Abrir câmera"):
@@ -14,14 +13,10 @@ if st.button("Abrir câmera"):
         img = Image.open(img_file)
         st.image(img, caption="Imagem capturada", use_column_width=True)
 
-        # Converte para OpenCV
-        img_cv = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
-
-        # Detecta QR Code
-        detector = cv2.QRCodeDetector()
-        data, bbox, _ = detector.detectAndDecode(img_cv)
-
-        if data:
-            st.success(f"QR Code detectado: {data}")
+        # Decodifica o QR code
+        decoded_objects = decode(img)
+        if decoded_objects:
+            for obj in decoded_objects:
+                st.success(f"QR Code detectado: {obj.data.decode('utf-8')}")
         else:
             st.warning("Nenhum QR Code detectado.")
