@@ -1,0 +1,15 @@
+version: "3.9"
+
+services:
+  streamlit:
+    container_name: meu_docker
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: host.docker.internal
+      DB_USER: root
+      DB_PASSWORD: 160390
+      DB_NAME: PCP
+    ports:
+      - "8501:8501"

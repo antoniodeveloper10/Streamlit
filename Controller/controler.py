@@ -1,12 +1,13 @@
 import json
+import os
 
 from connectar.connectMysql import MySQLConnection  # Supondo que a classe esteja nesse arquivo
 
 conn = MySQLConnection(
-    host = '127.0.0.1',
-    user = 'root',
-    password = '160390',
-    database = 'PCP',
+    host=os.getenv("DB_HOST", "localhost"),
+    user=os.getenv("DB_USER", "root"),
+    password=os.getenv("DB_PASSWORD", ""),
+    database=os.getenv("DB_NAME", "")
 )
 
 
