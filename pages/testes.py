@@ -1,29 +1,28 @@
-# import streamlit as st
-#
-# st.header("Utilizando a Câmera Input")
-#
-# # Captura uma foto da câmera
-# picture = st.camera_input("Tire uma foto")
-#
-# # Se houver foto, exibe a imagem
-# if picture:
-#     st.image(picture)
-#
-# st.header("Color Picker")
-#
-# # Cria um seletor de cor
-# color = st.color_picker('Escolha uma cor', '#00f900')
-# st.write('A cor selecionada é:', color)
-from qreader import QReader
-from PIL import Image
+# app.py
 import streamlit as st
+from PIL import Image
+import tempfile
+from pyzxing import BarCodeReader
 
-st.title("Leitor de QR Code sem OpenCV")
+st.title("📷 Leitor de Código de Barras 1D (Cloud-friendly)")
 
-uploaded = st.file_uploader("Envie uma imagem com QR Code", type=["png", "jpg", "jpeg"])
-if uploaded:
-    image = Image.open(uploaded)
-    st.image(image)
-    qreader = QReader()
-    decoded = qreader.detect_and_decode(image)
-    st.success(f"Conteúdo do QR Code: {decoded}")
+# Captura imagem
+image_file = st.camera_input("Aponte a câmera para o código de barras")
+
+if image_file is not None:
+    # Salva a imagem temporariamente
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".png") as tmp_file:
+        tmp_file.write(image_file.read())
+        tmp_filename = tmp_file.name
+
+    # Inicializa leitor
+    reader = BarCodeReader()
+    result = reader.decode(tmp_filename)
+
+    if result:
+        st.success("Código de barras detectado!")
+        for r in result:
+            st.write(f"Tipo: {r['type']}")
+            st.write(f"Dados: {r['raw']}")
+    else:
+        st.warning("Nenhum código de barras detectado.")
