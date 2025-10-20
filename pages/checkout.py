@@ -1,10 +1,10 @@
 import streamlit as st
 
-from pages.comanda import ComandaPizzaria
+#from pages.comanda import ComandaPizzaria
 
 
 class CheckoutPizzaria:
-    PRECOS = ComandaPizzaria.PRECOS
+    PRECOS = 'ComandaPizzaria.PRECOS'
 
     def exibir(self):
         st.title("💰 Checkout")
