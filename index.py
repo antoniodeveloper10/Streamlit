@@ -11,6 +11,7 @@ pages = {
         st.Page("pages/comanda.py", title="Comanda"),
         st.Page("pages/checkout.py", title="Checkout"),
         st.Page("pages/camera.py", title="Camera"),
+        st.Page("pages/carrega.py", title="Carga"),
     ]
 }
 
